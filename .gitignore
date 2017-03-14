@@ -108,7 +108,7 @@ fabric.properties
 
 ### Java ###
 # Compiled class file
-*.class
+#*.class
 
 # Log file
 *.log
@@ -146,7 +146,7 @@ hs_err_pid*
 .nfs*
 
 ### Maven ###
-target/
+#target/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
