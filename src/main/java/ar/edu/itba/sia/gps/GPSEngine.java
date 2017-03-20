@@ -1,8 +1,11 @@
 package gps;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
+import java.util.TreeSet;
 
 import gps.api.GPSProblem;
 import gps.api.GPSRule;
@@ -12,7 +15,7 @@ import gps.exception.NotAppliableException;
 public abstract class GPSEngine {
 
 	protected Queue<GPSNode> open;
-	protected Set<GPSState> bestCosts = new HashSet<GPSState>();
+	protected Map<GPSState, Integer> bestCosts;
 
 	protected GPSProblem problem;
 	long explosionCounter;
@@ -20,8 +23,9 @@ public abstract class GPSEngine {
 	// Use this variable in open set order.
 	protected SearchStrategy strategy;
 
-	public void engine(GPSProblem myProblem, SearchStrategy myStrategy) {
-
+	public GPSEngine(GPSProblem myProblem, SearchStrategy myStrategy) {
+		// TODO: open = *Su queue favorito, TENIENDO EN CUENTA EL ORDEN DE LOS NODOS*
+		bestCosts = new HashMap<GPSState, Integer>();
 		problem = myProblem;
 		strategy = myStrategy;
 
@@ -30,6 +34,7 @@ public abstract class GPSEngine {
 		boolean finished = false;
 		boolean failed = false;
 		open.add(rootNode);
+		// TODO: ¿Lógica de IDDFS?
 		while (!failed && !finished) {
 			if (open.size() <= 0) {
 				failed = true;
@@ -53,12 +58,27 @@ public abstract class GPSEngine {
 	}
 
 	private void explode(GPSNode node) {
+		Collection<GPSNode> newCandidates;
 		switch (strategy) {
-			case BFS:
-			case DFS:
-				if(bestCosts.contains(node.getState())){
-					return;
-				}
+		case ASTAR:
+			if (!isBest(node.getState(), node.getCost())) {
+				return;
+			}
+			newCandidates = new ArrayList<>();
+			break;
+		case BFS:
+		case DFS:
+		case IDDFS:
+			if (bestCosts.containsKey(node.getState())) {
+				return;
+			}
+			newCandidates = new ArrayList<>();
+			break;
+		case GREEDY:
+			newCandidates = new TreeSet<>(/* TODO: Comparator! */);
+			break;
+		default:
+			newCandidates = new ArrayList<>();
 		}
 		explosionCounter++;
 		updateBest(node);
@@ -66,15 +86,32 @@ public abstract class GPSEngine {
 			try {
 				GPSNode newNode = new GPSNode(rule.evalRule(node.getState()), node.getCost() + rule.getCost());
 				newNode.setParent(node);
-				open.add(newNode);
+				newCandidates.add(newNode);
 			} catch (NotAppliableException e) {
 				// Si no es aplicable, se saltea.
 			}
 		}
+		// TODO: ¿Cómo se agregan los nodos en las diferentes estrategias?
+		switch (strategy) {
+		case ASTAR:
+			break;
+		case BFS:
+			break;
+		case DFS:
+			break;
+		case IDDFS:
+			break;
+		case GREEDY:
+			break;
+		}
+	}
+
+	private boolean isBest(GPSState state, Integer cost) {
+		return !bestCosts.containsKey(state) || cost < bestCosts.get(state);
 	}
 
 	private void updateBest(GPSNode node) {
-		bestCosts.add(node.getState());
+		bestCosts.put(node.getState(), node.getCost());
 	}
 
 }
