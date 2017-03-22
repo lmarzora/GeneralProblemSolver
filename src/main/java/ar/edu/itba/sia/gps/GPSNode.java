@@ -1,6 +1,6 @@
-package gps;
+package ar.edu.itba.sia.gps;
 
-import gps.api.GPSState;
+import ar.edu.itba.sia.gps.api.GPSState;
 
 public class GPSNode {
 
@@ -8,27 +8,38 @@ public class GPSNode {
 
 	private GPSNode parent;
 
+	private Integer height;
+
 	private Integer cost;
 
-	public GPSNode(GPSState state, Integer cost) {
+	public GPSNode(GPSState state) {
 		this.state = state;
-		this.cost = cost;
+		this.height = 0;
+		this.cost = 0;
+	}
+
+	public GPSNode(GPSState state, GPSNode parent, Integer cost) {
+		this(state);
+		this.parent = parent;
+		this.height = parent.height + 1;
+		this.cost = parent.cost + cost;
+	}
+
+	public Integer getCost() {
+		return cost;
 	}
 
 	public GPSNode getParent() {
 		return parent;
 	}
 
-	public void setParent(GPSNode parent) {
-		this.parent = parent;
-	}
 
 	public GPSState getState() {
 		return state;
 	}
 
-	public Integer getCost() {
-		return cost;
+	public Integer getHeight() {
+		return height;
 	}
 
 	@Override
