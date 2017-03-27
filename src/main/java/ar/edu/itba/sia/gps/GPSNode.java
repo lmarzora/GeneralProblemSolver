@@ -1,6 +1,9 @@
 package ar.edu.itba.sia.gps;
 
+import ar.edu.itba.sia.gps.api.GPSRule;
 import ar.edu.itba.sia.gps.api.GPSState;
+
+import java.util.Optional;
 
 public class GPSNode {
 
@@ -24,6 +27,7 @@ public class GPSNode {
 		this.height = parent.height + 1;
 		this.cost = parent.cost + cost;
 	}
+
 
 	public Integer getCost() {
 		return cost;
@@ -70,5 +74,7 @@ public class GPSNode {
 			return false;
 		return true;
 	}
+
+
 
 }

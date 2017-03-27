@@ -1,18 +1,18 @@
 package ar.edu.itba.sia.gps;
 
 import ar.edu.itba.sia.gps.api.*;
-
 import java.util.*;
-
+import java.util.stream.Collectors;
 
 public class GPSEngine {
 
 	private Queue<GPSNode> frontier;
 	private Set<GPSNode> explored;
+	private GPSProblem problem;
 
 	public GPSEngine(GPSProblem myProblem, SearchStrategy myStrategy) {
-		// TODO: frontier = *Su queue favorito, TENIENDO EN CUENTA EL ORDEN DE LOS NODOS*
-		Comparator<GPSNode> comparator;
+		this.problem = myProblem;
+		Comparator<GPSNode> comparator = null;
 		switch (myStrategy) {
 			case ASTAR:
 				comparator = Comparator.comparingInt((n) -> n.getCost() + myProblem.getHValue(n.getState()));
@@ -29,104 +29,31 @@ public class GPSEngine {
 			case IDDFS:
 				break;
 		}
-
+		frontier = new PriorityQueue<>(comparator);
+		frontier.add(new GPSNode(myProblem.getInitState()));
+		explored = new HashSet<>();
 	}
 
 	public void findSolution() {
+		while (frontier.size() > 0) {
+			GPSNode n = frontier.remove();
+			explored.add(n);
+			if (problem.isGoal(n.getState())) {
+				//TODO: return applied rules
+				System.out.println(n.getState());
+				return;
+			}
 
+			List<GPSNode> candidates =
+					problem.getRules().stream()
+							.map((r) -> r.evalRule(n.getState())
+									.map((s) -> new GPSNode(s, n, r.getCost()))
+									.orElse(null))
+							.filter(Objects::nonNull)
+							.filter((node) -> !explored.contains(node))
+							.collect(Collectors.toList());
+
+			frontier.addAll(candidates);
+		}
 	}
-
-//	private void explode(GPSNode node) {
-//		Collection<GPSNode> newCandidates;
-//		switch (strategy) {
-//		case BFS:
-//			if (explored.containsKey(node.getState())) {
-//				return;
-//			}
-//			newCandidates = new ArrayList<>();
-//			addCandidates(node, newCandidates);
-//			// TODO: ¿Cómo se agregan los nodos a frontier en BFS?
-//			break;
-//		case DFS:
-//			if (explored.containsKey(node.getState())) {
-//				return;
-//			}
-//			newCandidates = new ArrayList<>();
-//			addCandidates(node, newCandidates);
-//			// TODO: ¿Cómo se agregan los nodos a frontier en DFS?
-//			break;
-//		case IDDFS:
-//			if (explored.containsKey(node.getState())) {
-//				return;
-//			}
-//			newCandidates = new ArrayList<>();
-//			addCandidates(node, newCandidates);
-//			// TODO: ¿Cómo se agregan los nodos a frontier en IDDFS?
-//			break;
-//		case GREEDY:
-//			newCandidates = new PriorityQueue<>(/* TODO: Comparator! */);
-//			addCandidates(node, newCandidates);
-//			// TODO: ¿Cómo se agregan los nodos a frontier en GREEDY?
-//			break;
-//		case ASTAR:
-//			if (!isBest(node.getState(), node.getCost())) {
-//				return;
-//			}
-//			newCandidates = new ArrayList<>();
-//			addCandidates(node, newCandidates);
-//			// TODO: ¿Cómo se agregan los nodos a frontier en A*?
-//			break;
-//		}
-//	}
-//
-//	private void addCandidates(GPSNode node, Collection<GPSNode> candidates) {
-//		explosionCounter++;
-//		explored.put(node.getState(), node.getCost());
-//		for (GPSRule rule : problem.getRules()) {
-//			Optional<GPSState> newState = rule.evalRule(node.getState());
-//			if (newState.isPresent()) {
-//				GPSNode newNode = new GPSNode(newState.get(), node.getCost() + rule.getCost());
-//				newNode.setParent(node);
-//				candidates.add(newNode);
-//			}
-//		}
-//	}
-//
-//	private boolean isBest(GPSState state, Integer cost) {
-//		return !explored.containsKey(state) || cost < explored.get(state);
-//	}
-
-	// GETTERS FOR THE PEOPLE!
-
-	public Queue<GPSNode> getFrontier() {
-		return frontier;
-	}
-/*
-	public Map<GPSState, Integer> getExplored() {
-		return explored;
-	}
-
-
-	public GPSProblem getProblem() {
-		return problem;
-	}
-
-	public long getExplosionCounter() {
-		return explosionCounter;
-	}
-
-	public boolean isFinished() {
-		return finished;
-	}
-
-	public boolean isFailed() {
-		return failed;
-	}
-
-	public GPSNode getSolutionNode() {
-		return solutionNode;
-	}
-*/
-
-
 }
