@@ -34,20 +34,17 @@ public class GPSEngine {
 		explored = new HashSet<>();
 	}
 
-	public void findSolution() {
+	public List<GPSRule> findSolution() {
 		while (frontier.size() > 0) {
 			GPSNode n = frontier.remove();
 			explored.add(n);
-			if (problem.isGoal(n.getState())) {
-				//TODO: return applied rules
-				System.out.println(n.getState());
-				return;
-			}
+			if (problem.isGoal(n.getState()))
+				return n.getPath();
 
 			List<GPSNode> candidates =
 					problem.getRules().stream()
 							.map((r) -> r.evalRule(n.getState())
-									.map((s) -> new GPSNode(s, n, r.getCost()))
+									.map((s) -> new GPSNode(s, n, r))
 									.orElse(null))
 							.filter(Objects::nonNull)
 							.filter((node) -> !explored.contains(node))
@@ -55,5 +52,7 @@ public class GPSEngine {
 
 			frontier.addAll(candidates);
 		}
+
+		return null;
 	}
 }

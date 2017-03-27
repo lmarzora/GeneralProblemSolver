@@ -13,5 +13,4 @@ public interface GPSState {
 	 * @return true if self is the same as the state given, false if they are different.
 	 */
 	boolean equals(Object state);
-
 }
