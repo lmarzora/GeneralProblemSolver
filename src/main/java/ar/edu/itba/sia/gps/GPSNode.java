@@ -75,14 +75,8 @@ public class GPSNode {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof GPSNode)) return false;
-
 		GPSNode gpsNode = (GPSNode) o;
-
-		if (getState() != null ? !getState().equals(gpsNode.getState()) : gpsNode.getState() != null) return false;
-		if (getParent() != null ? !getParent().equals(gpsNode.getParent()) : gpsNode.getParent() != null) return false;
-		if (getHeight() != null ? !getHeight().equals(gpsNode.getHeight()) : gpsNode.getHeight() != null) return false;
-		if (getCost() != null ? !getCost().equals(gpsNode.getCost()) : gpsNode.getCost() != null) return false;
-		return generationRule != null ? generationRule.equals(gpsNode.generationRule) : gpsNode.generationRule == null;
+		return getState().equals(gpsNode.getState());
 	}
 
 	@Override
