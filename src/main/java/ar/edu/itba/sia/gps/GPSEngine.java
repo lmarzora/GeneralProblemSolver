@@ -27,6 +27,7 @@ public class GPSEngine {
 				comparator = Comparator.comparingInt((n) -> myProblem.getHValue(n.getState()));
 				break;
 			case IDDFS:
+				comparator = Comparator.comparingInt((GPSNode n) -> n.getHeight()%5).reversed();
 				break;
 		}
 		frontier = new PriorityQueue<>(comparator);
