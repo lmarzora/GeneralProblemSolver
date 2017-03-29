@@ -45,7 +45,7 @@ public class GPSEngine {
 			explored.add(n);
 
 			if (problem.isGoal(n.getState())) {
-				observers.forEach((observer -> observer.finalize()));
+				//observers.forEach((observer -> observer.finalize()));
 				return n.getPath();
 			}
 
@@ -62,7 +62,7 @@ public class GPSEngine {
 			observers.forEach((observer) -> candidates.forEach(observer::observe));
 		}
 
-		observers.forEach((observer -> observer.finalize()));
+		//observers.forEach((observer -> observer.finalize()));
 		return null;
 	}
 
