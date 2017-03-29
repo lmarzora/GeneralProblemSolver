@@ -66,6 +66,8 @@ public class GPSNode {
 		return height;
 	}
 
+	public GPSRule getGenerationRule() { return generationRule; }
+
 	@Override
 	public String toString() {
 		return state.toString();
