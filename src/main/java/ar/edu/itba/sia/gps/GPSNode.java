@@ -14,12 +14,15 @@ public class GPSNode {
 	private Integer height;
 	private Integer cost;
 	private GPSRule generationRule;
+	private String id;
+	private static long currentId;
 
 	public GPSNode(final GPSState state) {
 		this.state = state;
 		this.height = 0;
 		this.cost = 0;
 		this.generationRule = null;
+		this.id = String.valueOf(currentId++);
 	}
 
 	public GPSNode(final GPSState state, final GPSNode parent, final GPSRule rule) {
@@ -64,6 +67,10 @@ public class GPSNode {
 
 	public Integer getHeight() {
 		return height;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public GPSRule getGenerationRule() { return generationRule; }
