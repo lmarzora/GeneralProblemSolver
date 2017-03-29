@@ -65,4 +65,9 @@ public class GPSEngine {
 		observers.forEach(GPSObserver::finalize);
 		return null;
 	}
+
+	public GPSEngine addObserver(GPSObserver observer) {
+		observers.add(observer);
+		return this;
+	}
 }
