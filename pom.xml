@@ -33,12 +33,6 @@
           <artifactId>jgrapht-ext</artifactId>
           <version>1.0.1</version>
       </dependency>-->
-      <dependency>
-          <artifactId>gs-core</artifactId>
-          <groupId>org.graphstream</groupId>
-          <version>1.0</version>
-          <optional>false</optional>
-      </dependency>
   </dependencies>
   <build>
     <plugins>
