@@ -39,11 +39,10 @@ public class GPSEngine {
 	public List<GPSRule> findSolution() {
 		GPSNode root = new GPSNode(problem.getInitState());
 		frontier.add(root);
-		observers.forEach((observer) -> observer.start(root));
 		while (frontier.size() > 0) {
 			GPSNode n = frontier.remove();
 			explored.add(n);
-
+			observers.forEach((o) -> o.observe(n));
 			if (problem.isGoal(n.getState())) {
 				observers.forEach((observer -> observer.finalize()));
 				return n.getPath();
@@ -59,7 +58,7 @@ public class GPSEngine {
 							.collect(Collectors.toList());
 
 			frontier.addAll(candidates);
-			observers.forEach((observer) -> candidates.forEach(observer::observe));
+
 		}
 
 		observers.forEach((observer -> observer.finalize()));
