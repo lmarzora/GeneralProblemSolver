@@ -5,7 +5,6 @@ import ar.edu.itba.sia.gps.api.GPSState;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class GPSNode {
 
