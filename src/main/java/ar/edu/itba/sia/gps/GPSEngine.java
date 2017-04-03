@@ -43,6 +43,7 @@ public class GPSEngine {
 		while (frontier.size() > 0) {
 			GPSNode n = frontier.remove();
 			explored.add(n);
+			observers.forEach(o -> o.observeVisited(n));
 			if (problem.isGoal(n.getState())) {
 				observers.forEach(o -> o.finalize());
 				return n.getPath();
@@ -58,7 +59,7 @@ public class GPSEngine {
 							.collect(Collectors.toList());
 
 			frontier.addAll(candidates);
-			observers.forEach(o -> candidates.forEach(c -> o.observe(c)));
+			observers.forEach(o -> candidates.forEach(c -> o.observeFrontier(c)));
 
 		}
 
