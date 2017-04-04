@@ -33,9 +33,8 @@ public class GPSNode {
 	}
 
 	public String getSolution() {
-		if (this.parent == null) {
+		if (this.parent == null) 
 			return this.state.toString();
-		}
 		return this.parent.getSolution() + this.state.toString();
 	}
 

@@ -50,7 +50,7 @@ public class GPSEngine {
 			}
 
 			List<GPSNode> candidates =
-					problem.getRules().stream()
+					 problem.getRules().stream()
 							.map((r) -> r.evalRule(n.getState())
 									.map((s) -> new GPSNode(s, n, r))
 									.orElse(null))
@@ -60,7 +60,6 @@ public class GPSEngine {
 
 			frontier.addAll(candidates);
 			observers.forEach(o -> candidates.forEach(c -> o.observeFrontier(c)));
-
 		}
 
 		observers.forEach(o -> o.finalize());
