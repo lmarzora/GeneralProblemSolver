@@ -40,6 +40,8 @@ public class GPSEngine {
 		GPSNode root = new GPSNode(problem.getInitState());
 		frontier.add(root);
 		observers.forEach(observer -> observer.start(root));
+		List<GPSRule> rules;
+		long seed;
 		while (frontier.size() > 0) {
 			GPSNode n = frontier.remove();
 			if(explored.contains(n))
@@ -50,9 +52,12 @@ public class GPSEngine {
 				observers.forEach(o -> o.finalize());
 				return n.getPath();
 			}
+			seed = System.nanoTime();
+			rules = problem.getRules();
+			Collections.shuffle(rules, new Random(seed));
 
 			List<GPSNode> candidates =
-					 problem.getRules().stream()
+					   rules.stream()
 							.map((r) -> r.evalRule(n.getState())
 									.map((s) -> new GPSNode(s, n, r))
 									.orElse(null))
