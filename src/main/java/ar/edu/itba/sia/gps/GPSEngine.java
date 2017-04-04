@@ -42,6 +42,8 @@ public class GPSEngine {
 		observers.forEach(observer -> observer.start(root));
 		while (frontier.size() > 0) {
 			GPSNode n = frontier.remove();
+			if(explored.contains(n))
+				continue;
 			explored.add(n);
 			observers.forEach(o -> o.observeVisited(n));
 			if (problem.isGoal(n.getState())) {
@@ -55,7 +57,7 @@ public class GPSEngine {
 									.map((s) -> new GPSNode(s, n, r))
 									.orElse(null))
 							.filter(Objects::nonNull)
-							.filter((node) -> !frontier.contains(node))
+							.filter((node) -> !explored.contains(node))
 							.collect(Collectors.toList());
 
 			frontier.addAll(candidates);
