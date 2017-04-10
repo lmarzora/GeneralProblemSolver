@@ -88,11 +88,6 @@ public class GPSNode {
 
 	@Override
 	public int hashCode() {
-		int result = getState() != null ? getState().hashCode() : 0;
-		result = 31 * result + (getParent() != null ? getParent().hashCode() : 0);
-		result = 31 * result + (getHeight() != null ? getHeight().hashCode() : 0);
-		result = 31 * result + (getCost() != null ? getCost().hashCode() : 0);
-		result = 31 * result + (generationRule != null ? generationRule.hashCode() : 0);
-		return result;
+		return getState() != null ? getState().hashCode() : 0;
 	}
 }
